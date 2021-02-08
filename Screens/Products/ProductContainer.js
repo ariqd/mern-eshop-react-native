@@ -10,24 +10,36 @@ import ProductList from "./ProductList";
 import { Container, Header, Icon, Item, Input, Text } from "native-base";
 import SearchedProducts from "./SearchedProducts";
 import Banner from "../../Shared/Banner";
+import CategoryFilter from "./CategoryFilter";
 import { Keyboard } from "react-native";
 
 const data = require("../../assets/data/products.json");
+const dataCategories = require("../../assets/data/categories.json");
 
 const ProductContainer = () => {
   const [products, setProducts] = useState([]);
   const [productsFiltered, setProductsFiltered] = useState([]);
   const [focus, setFocus] = useState();
+  const [categories, setCategories] = useState([]);
+  const [productsCtg, setProductsCtg] = useState([]);
+  const [active, setActive] = useState();
+  const [initialState, setInitialState] = useState([]);
 
   useEffect(() => {
     setProducts(data);
     setProductsFiltered(data);
     setFocus(false);
+    setCategories(dataCategories);
+    setActive(-1);
+    setInitialState(data);
 
     return () => {
       setProducts([]);
       setProductsFiltered([]);
-      setFocus();
+      setFocus(false);
+      setCategories([]);
+      setActive();
+      setInitialState();
     };
   }, []);
 
@@ -44,6 +56,20 @@ const ProductContainer = () => {
   const onBlur = () => {
     setFocus(false);
     Keyboard.dismiss();
+  };
+
+  // Categories
+  const changeCtg = (ctg) => {
+    {
+      ctg === "all"
+        ? [setProductsCtg(initialState), setActive(true)]
+        : [
+            setProductsCtg(
+              products.filter((i) => i.category.$oid === ctg),
+              setActive(true)
+            ),
+          ];
+    }
   };
 
   return (
@@ -63,8 +89,19 @@ const ProductContainer = () => {
         <SearchedProducts productsFiltered={productsFiltered} />
       ) : (
         <ScrollView>
-          <View style={styles.container}>
-            <Banner />
+          <View>
+            <View>
+              <Banner />
+            </View>
+            <View>
+              <CategoryFilter
+                categories={categories}
+                categoryFilter={changeCtg}
+                productsCtg={productsCtg}
+                active={active}
+                setActive={setActive}
+              />
+            </View>
             <View style={styles.listContainer}>
               <FlatList
                 data={products}
