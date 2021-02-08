@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   ScrollView,
+  Dimensions,
 } from "react-native";
 import ProductList from "./ProductList";
 import { Container, Header, Icon, Item, Input, Text } from "native-base";
@@ -12,6 +13,8 @@ import SearchedProducts from "./SearchedProducts";
 import Banner from "../../Shared/Banner";
 import CategoryFilter from "./CategoryFilter";
 import { Keyboard } from "react-native";
+
+const { height } = Dimensions.get("window");
 
 const data = require("../../assets/data/products.json");
 const dataCategories = require("../../assets/data/categories.json");
@@ -30,6 +33,7 @@ const ProductContainer = () => {
     setProductsFiltered(data);
     setFocus(false);
     setCategories(dataCategories);
+    setProductsCtg(data);
     setActive(-1);
     setInitialState(data);
 
@@ -102,16 +106,17 @@ const ProductContainer = () => {
                 setActive={setActive}
               />
             </View>
-            <View style={styles.listContainer}>
-              <FlatList
-                data={products}
-                numColumns={2}
-                renderItem={({ item }) => (
-                  <ProductList key={item.id} item={item} />
-                )}
-                keyExtractor={(item) => item.name}
-              />
-            </View>
+            {productsCtg.length > 0 ? (
+              <View style={styles.listContainer}>
+                {productsCtg.map((item) => {
+                  return <ProductList key={item._id.$oid} item={item} />;
+                })}
+              </View>
+            ) : (
+              <View style={[styles.center, { height: height / 2 }]}>
+                <Text>No product found</Text>
+              </View>
+            )}
           </View>
         </ScrollView>
       )}
@@ -125,12 +130,16 @@ const styles = StyleSheet.create({
     backgroundColor: "gainsboro",
   },
   listContainer: {
-    width: "100%",
+    height: height,
     flex: 1,
     flexDirection: "row",
     alignItems: "flex-start",
     flexWrap: "wrap",
     backgroundColor: "gainsboro",
+  },
+  center: {
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
