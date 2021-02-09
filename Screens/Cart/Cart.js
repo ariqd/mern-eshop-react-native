@@ -1,26 +1,82 @@
 import React from "react";
-import { View, Dimensions, StyleSheet, TouchableOpacity } from "react-native";
-import { Container, Text, Left, Right, H1 } from "native-base";
+import {
+  View,
+  Dimensions,
+  StyleSheet,
+  TouchableOpacity,
+  Button,
+} from "react-native";
+import {
+  Container,
+  Text,
+  Left,
+  Right,
+  H1,
+  ListItem,
+  Thumbnail,
+  Body,
+} from "native-base";
+
+import Icon from "react-native-vector-icons/FontAwesome";
+
 import { connect } from "react-redux";
+import * as actions from "../../Redux/Actions/cartActions";
 
 const { height, width } = Dimensions.get("window");
 
 const Cart = (props) => {
-  return (
-    <>
-      {props.cartItems.length ? (
-        <View style={{ flex: 1 }}>
-          {props.cartItems.map((x) => {
-            return <Text>{x.product.name}</Text>;
-          })}
-        </View>
-      ) : (
-        <Container style={styles.emptyContainer}>
-          <Text>Looks like your cart is empty</Text>
-          <Text>Add products to your cart to get started</Text>
-        </Container>
-      )}
-    </>
+  let total = 0;
+
+  props.cartItems.forEach((cart) => {
+    return (total += cart.product.price);
+  });
+
+  return props.cartItems.length ? (
+    <Container>
+      <H1 style={{ alignSelf: "center" }}>Cart</H1>
+      {props.cartItems.map((data) => {
+        return (
+          <ListItem style={styles.listItem} key={Math.random()} avatar>
+            <Left>
+              <Thumbnail
+                source={{
+                  uri: data.product.image
+                    ? data.product.image
+                    : "https://cdn.pixabay.com/photo/2012/04/01/17/29/box-23649_960_720.png",
+                }}
+              />
+            </Left>
+            <Body style={styles.body}>
+              <Left>
+                <Text>{data.product.name}</Text>
+              </Left>
+              <Right>
+                <Text>$ {data.product.price}</Text>
+              </Right>
+            </Body>
+          </ListItem>
+        );
+      })}
+      <View style={styles.bottomContainer}>
+        <Left>
+          <Text style={styles.price}>$ {total}</Text>
+        </Left>
+        <Right>
+          <Button title="Clear" />
+        </Right>
+        <Right style={{ paddingRight: 10 }}>
+          <Button
+            title="Checkout"
+            onPress={() => props.navigation.navigate("Checkout")}
+          />
+        </Right>
+      </View>
+    </Container>
+  ) : (
+    <Container style={styles.emptyContainer}>
+      <Text>Looks like your cart is empty</Text>
+      <Text>Add products to your cart to get started</Text>
+    </Container>
   );
 };
 
@@ -37,6 +93,16 @@ const styles = StyleSheet.create({
     height: height,
     alignItems: "center",
     justifyContent: "center",
+  },
+  listItem: {
+    alignItems: "center",
+    backgroundColor: "white",
+    justifyContent: "center",
+  },
+  body: {
+    margin: 10,
+    alignItems: "center",
+    flexDirection: "row",
   },
   bottomContainer: {
     flexDirection: "row",
