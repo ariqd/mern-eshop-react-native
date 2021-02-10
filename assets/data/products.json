@@ -2,7 +2,7 @@
   "_id": {
     "$oid": "5f15d8852a025143f9593a7c"
   },
-  "image": "https://lh3.googleusercontent.com/proxy/PHMeEUxncFvxo71Hbw80j6G8IEv8CHaKUPMbfIAU_XfRTkc-S72ohLqMtiU0Ch-yZG9flgxaK1VXh0W4aIzZawc1Z2Yi",
+  "image": "https://images-na.ssl-images-amazon.com/images/I/61UuGXhNqdL._SL1000_.jpg",
   "brand": "PS3",
   "price": 250,
   "rating": 1,
@@ -19,7 +19,7 @@
   "_id": {
     "$oid": "5f15d92ee520d44421ed8e9b"
   },
-  "image": "",
+  "image": "https://atlas-content-cdn.pixelsquid.com/stock-images/adirondack-chair-outdoor-z07kovF-600.jpg",
   "brand": "IKEA",
   "price": 350.9,
   "rating": 5,
@@ -70,7 +70,7 @@
   "_id": {
     "$oid": "5f15da13e520d44421ed8e9e"
   },
-  "image": "https://lh3.googleusercontent.com/proxy/ZqRo12bOfeU7xg7mTMfgENdMop_Zl9srLYDKeFilLCZkych8UO4ldDlRzT-8q5scq35krZsqxprZA85RdGLEVvejnPY4RRfNZ1eXDUJRoqHHRWBB5iMCx7UxT4l6iA",
+  "image": "https://lh3.googleusercontent.com/proxy/meAQ1a3ow89yf0FQ2_baTQv4caaNQTwiTyrkNQXj5vtnnb0hBq_ejLJ7ZJ0gjEevo31R47xuwBFQ5xAUhJpkYD61EFqULsL_jf1YuKHWGp3P2fDCJ0l0HxcLl5s8Cw",
   "brand": "Mobilix",
   "price": 1000,
   "rating": 5,
