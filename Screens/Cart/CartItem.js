@@ -7,7 +7,7 @@ const CartItem = (props) => {
   const [quantity, setQuantity] = useState(props.item.item.quantity);
 
   return (
-    <ListItem style={styles.listItem} key={Math.random()} avatar>
+    <ListItem style={styles.listItem} key={data.id} avatar>
       <Left>
         <Thumbnail
           source={{

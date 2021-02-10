@@ -34,12 +34,12 @@ const Checkout = (props) => {
       dateOrdered: Date.now(),
       orderItems,
       phone,
-      ShippingAddress1: address,
-      ShippingAddress2: address2,
+      shippingAddress1: address,
+      shippingAddress2: address2,
       zip,
     };
 
-    props.navigation.navigate("Payment", { order: orderItems });
+    props.navigation.navigate("Payment", { order: orderObject });
   };
 
   return (

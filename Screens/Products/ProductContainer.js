@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from "react";
 import {
   View,
-  FlatList,
+  // FlatList,
   StyleSheet,
-  ActivityIndicator,
+  // ActivityIndicator,
   ScrollView,
   Dimensions,
 } from "react-native";
 import ProductList from "./ProductList";
 import { Container, Header, Icon, Item, Input, Text } from "native-base";
+import { Keyboard } from "react-native";
+import axios from "axios";
+import baseURL from "../../assets/common/baseUrl";
+
 import SearchedProducts from "./SearchedProducts";
 import Banner from "../../Shared/Banner";
 import CategoryFilter from "./CategoryFilter";
-import { Keyboard } from "react-native";
 
 const { height } = Dimensions.get("window");
 
-const data = require("../../assets/data/products.json");
-const dataCategories = require("../../assets/data/categories.json");
+// const data = require("../../assets/data/products.json");
+// const dataCategories = require("../../assets/data/categories.json");
 
 const ProductContainer = (props) => {
   const [products, setProducts] = useState([]);
@@ -29,13 +32,31 @@ const ProductContainer = (props) => {
   const [initialState, setInitialState] = useState([]);
 
   useEffect(() => {
-    setProducts(data);
-    setProductsFiltered(data);
+    // setProducts(data);
+    // setProductsFiltered(data);
     setFocus(false);
-    setCategories(dataCategories);
-    setProductsCtg(data);
+    // setCategories(dataCategories);
+    // setProductsCtg(data);
     setActive(-1);
-    setInitialState(data);
+    // setInitialState(data);
+
+    // Products
+    axios.get(`${baseURL}/products`).then((res) => {
+      setProducts(res.data);
+      setProductsFiltered(res.data);
+      setProductsCtg(res.data);
+      setInitialState(res.data);
+    });
+
+    // Categories
+    axios
+      .get(`${baseURL}/categories`)
+      .then((res) => {
+        setCategories(res.data);
+      })
+      .catch((err) => {
+        console.log("API call error on /categories", err);
+      });
 
     return () => {
       setProducts([]);
@@ -69,7 +90,7 @@ const ProductContainer = (props) => {
         ? [setProductsCtg(initialState), setActive(true)]
         : [
             setProductsCtg(
-              products.filter((i) => i.category.$oid === ctg),
+              products.filter((i) => i.category._id === ctg),
               setActive(true)
             ),
           ];
@@ -90,7 +111,10 @@ const ProductContainer = (props) => {
         </Item>
       </Header>
       {focus ? (
-        <SearchedProducts productsFiltered={productsFiltered} navigation={props.navigation} />
+        <SearchedProducts
+          productsFiltered={productsFiltered}
+          navigation={props.navigation}
+        />
       ) : (
         <ScrollView>
           <View>
@@ -109,7 +133,13 @@ const ProductContainer = (props) => {
             {productsCtg.length > 0 ? (
               <View style={styles.listContainer}>
                 {productsCtg.map((item) => {
-                  return <ProductList key={item._id.$oid} item={item} navigation={props.navigation} />;
+                  return (
+                    <ProductList
+                      key={item._id}
+                      item={item}
+                      navigation={props.navigation}
+                    />
+                  );
                 })}
               </View>
             ) : (
@@ -130,7 +160,7 @@ const styles = StyleSheet.create({
     backgroundColor: "gainsboro",
   },
   listContainer: {
-    height: height * 1.3,
+    height: height,
     flex: 1,
     flexDirection: "row",
     alignItems: "flex-start",
