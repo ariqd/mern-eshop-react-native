@@ -1,5 +1,11 @@
 import React, { useState, useCallback } from "react";
-import { View, StyleSheet, ScrollView, Dimensions } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  ActivityIndicator,
+} from "react-native";
 import ProductList from "./ProductList";
 import { Container, Header, Icon, Item, Input, Text } from "native-base";
 import { useFocusEffect } from "@react-navigation/native";
@@ -21,6 +27,7 @@ const ProductContainer = (props) => {
   const [productsCtg, setProductsCtg] = useState([]);
   const [active, setActive] = useState();
   const [initialState, setInitialState] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useFocusEffect(
     useCallback(() => {
@@ -33,6 +40,7 @@ const ProductContainer = (props) => {
         setProductsFiltered(res.data);
         setProductsCtg(res.data);
         setInitialState(res.data);
+        setIsLoading(false);
       });
 
       // Categories
@@ -85,7 +93,7 @@ const ProductContainer = (props) => {
     }
   };
 
-  return (
+  return !isLoading ? (
     <Container>
       <Header searchBar rounded>
         <Item>
@@ -139,6 +147,15 @@ const ProductContainer = (props) => {
         </ScrollView>
       )}
     </Container>
+  ) : (
+    <Container
+      style={[
+        styles.ceonter,
+        { backgroundColor: "#f2f2f2", height: height, padding: 8 },
+      ]}
+    >
+      <ActivityIndicator size="large" color="red" />
+    </Container>
   );
 };
 
@@ -148,7 +165,6 @@ const styles = StyleSheet.create({
     backgroundColor: "gainsboro",
   },
   listContainer: {
-    // height: height,
     paddingBottom: 16,
     flex: 1,
     flexDirection: "row",
