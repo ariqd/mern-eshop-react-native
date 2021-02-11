@@ -1,14 +1,8 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  // FlatList,
-  StyleSheet,
-  // ActivityIndicator,
-  ScrollView,
-  Dimensions,
-} from "react-native";
+import React, { useState, useCallback } from "react";
+import { View, StyleSheet, ScrollView, Dimensions } from "react-native";
 import ProductList from "./ProductList";
 import { Container, Header, Icon, Item, Input, Text } from "native-base";
+import { useFocusEffect } from "@react-navigation/native";
 import { Keyboard } from "react-native";
 import axios from "axios";
 import baseURL from "../../assets/common/baseUrl";
@@ -19,9 +13,6 @@ import CategoryFilter from "./CategoryFilter";
 
 const { height } = Dimensions.get("window");
 
-// const data = require("../../assets/data/products.json");
-// const dataCategories = require("../../assets/data/categories.json");
-
 const ProductContainer = (props) => {
   const [products, setProducts] = useState([]);
   const [productsFiltered, setProductsFiltered] = useState([]);
@@ -31,42 +22,39 @@ const ProductContainer = (props) => {
   const [active, setActive] = useState();
   const [initialState, setInitialState] = useState([]);
 
-  useEffect(() => {
-    // setProducts(data);
-    // setProductsFiltered(data);
-    setFocus(false);
-    // setCategories(dataCategories);
-    // setProductsCtg(data);
-    setActive(-1);
-    // setInitialState(data);
+  useFocusEffect(
+    useCallback(() => {
+      setFocus(false);
+      setActive(-1);
 
-    // Products
-    axios.get(`${baseURL}/products`).then((res) => {
-      setProducts(res.data);
-      setProductsFiltered(res.data);
-      setProductsCtg(res.data);
-      setInitialState(res.data);
-    });
-
-    // Categories
-    axios
-      .get(`${baseURL}/categories`)
-      .then((res) => {
-        setCategories(res.data);
-      })
-      .catch((err) => {
-        console.log("API call error on /categories", err);
+      // Products
+      axios.get(`${baseURL}/products`).then((res) => {
+        setProducts(res.data);
+        setProductsFiltered(res.data);
+        setProductsCtg(res.data);
+        setInitialState(res.data);
       });
 
-    return () => {
-      setProducts([]);
-      setProductsFiltered([]);
-      setFocus(false);
-      setCategories([]);
-      setActive();
-      setInitialState();
-    };
-  }, []);
+      // Categories
+      axios
+        .get(`${baseURL}/categories`)
+        .then((res) => {
+          setCategories(res.data);
+        })
+        .catch((err) => {
+          console.log("API call error on /categories", err);
+        });
+
+      return () => {
+        setProducts([]);
+        setProductsFiltered([]);
+        setFocus(false);
+        setCategories([]);
+        setActive();
+        setInitialState();
+      };
+    }, [])
+  );
 
   const searchProduct = (text) => {
     setProductsFiltered(
@@ -160,7 +148,8 @@ const styles = StyleSheet.create({
     backgroundColor: "gainsboro",
   },
   listContainer: {
-    height: height,
+    // height: height,
+    paddingBottom: 16,
     flex: 1,
     flexDirection: "row",
     alignItems: "flex-start",
