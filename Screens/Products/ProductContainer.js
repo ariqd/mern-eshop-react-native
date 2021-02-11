@@ -151,7 +151,7 @@ const ProductContainer = (props) => {
     <Container
       style={[
         styles.ceonter,
-        { backgroundColor: "#f2f2f2", height: height, padding: 8 },
+        { backgroundColor: "#f2f2f2", padding: 8 },
       ]}
     >
       <ActivityIndicator size="large" color="red" />
