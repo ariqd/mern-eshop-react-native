@@ -17,7 +17,8 @@ export const loginUser = (user, dispatch) => {
     .then((res) => res.json())
     .then((data) => {
       if (data) {
-        AsyncStorage.setItem("jwt", data.token);
+        const token = data.token;
+        AsyncStorage.setItem("jwt", token);
         const decoded = jwt_decode(token);
         dispatch(setCurrentUser(decoded, user));
       } else {
@@ -31,6 +32,8 @@ export const loginUser = (user, dispatch) => {
         text1: "Please provide correct credentials",
         text2: "",
       });
+
+      console.log(error);
 
       logoutUser(dispatch);
     });

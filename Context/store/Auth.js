@@ -17,7 +17,7 @@ const Auth = (props) => {
   useEffect(() => {
     setShowChild(true);
     if (AsyncStorage.jwt) {
-      const decoded = AsyncStorage.jwt;
+      const decoded = AsyncStorage.jwt ? AsyncStorage.jwt : null;
       if (setShowChild) {
         dispatch(setCurrentUser(jwt_decode(decoded)));
       }
