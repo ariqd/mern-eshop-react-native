@@ -18,6 +18,26 @@ import AsyncStorage from "@react-native-community/async-storage";
 
 const { height, width } = Dimensions.get("window");
 
+const ListHeader = () => {
+  return (
+    <View elevation={1} style={s.listHeader}>
+      <View style={s.headerItem}></View>
+      <View style={s.headerItem}>
+        <Text style={{ fontWeight: "bold" }}>Brand</Text>
+      </View>
+      <View style={s.headerItem}>
+        <Text style={{ fontWeight: "bold" }}>Name</Text>
+      </View>
+      <View style={s.headerItem}>
+        <Text style={{ fontWeight: "bold" }}>Category</Text>
+      </View>
+      <View style={s.headerItem}>
+        <Text style={{ fontWeight: "bold" }}>Price</Text>
+      </View>
+    </View>
+  );
+};
+
 const Products = (props) => {
   const [productList, setProductList] = useState([]);
   const [productFilter, setProductFilter] = useState([]);
@@ -47,23 +67,39 @@ const Products = (props) => {
     }, [])
   );
 
+  const searchProduct = (text) => {
+    if (text === "") {
+      setProductFilter(productList);
+    } else {
+      setProductFilter(
+        productList.filter((i) =>
+          i.name.toLowerCase().includes(text.toLowerCase())
+        )
+      );
+    }
+  };
+
   return (
     <View>
       <View>
         <Header searchBar rounded>
           <Item style={{ padding: 10 }}>
             <Icon name="search" />
-            <Input placeholder="Search" />
+            <Input
+              placeholder="Search by Name"
+              onChangeText={(text) => searchProduct(text)}
+            />
           </Item>
         </Header>
       </View>
 
       {loading ? (
-        <View>
+        <View style={s.spinner}>
           <ActivityIndicator size="large" color="red" />
         </View>
       ) : (
         <FlatList
+          ListHeaderComponent={ListHeader}
           data={productFilter}
           keyExtractor={(item) => item.id}
           renderItem={({ item, index }) => (
@@ -74,5 +110,22 @@ const Products = (props) => {
     </View>
   );
 };
+
+const s = StyleSheet.create({
+  listHeader: {
+    flexDirection: "row",
+    padding: 5,
+    backgroundColor: "gainsboro",
+  },
+  headerItem: {
+    margin: 3,
+    width: width / 6,
+  },
+  spinner: {
+    height: height / 2,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
 
 export default Products;

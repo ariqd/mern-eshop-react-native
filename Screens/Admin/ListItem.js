@@ -8,14 +8,51 @@ import {
   TouchableOpacity,
   Dimensions,
   Button,
+  Modal,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 const { width } = Dimensions.get("window");
 
 const ListItem = (props) => {
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <View>
+      <Modal
+        animationType="fade"
+        transparent
+        visible={showModal}
+        onRequestClose={() => setShowModal(false)}
+      >
+        <View style={s.centeredView}>
+          <View style={s.modalView}>
+            <TouchableOpacity
+              underlayColor="#E8E8E8"
+              onPress={() => setShowModal(false)}
+              style={{
+                alignSelf: "flex-end",
+                position: "absolute",
+                top: 5,
+                right: 10,
+              }}
+            >
+              <Icon name="close" size={20} />
+            </TouchableOpacity>
+            <Button
+              title="Edit"
+              onPress={() => [
+                props.navigation.navigate("ProductForm"),
+                setShowModal(false),
+              ]}
+            />
+            <Button
+              title="Delete"
+              // Delete
+            />
+          </View>
+        </View>
+      </Modal>
       <TouchableOpacity
         style={[
           s.container,
@@ -23,7 +60,10 @@ const ListItem = (props) => {
             backgroundColor: props.index % 2 === 0 ? "white" : "gainsboro",
           },
         ]}
-        // onPress
+        onLongPress={() => setShowModal(true)}
+        onPress={() =>
+          props.navigation.navigate("Product Detail", { item: props })
+        }
       >
         <Image
           style={s.image}
@@ -63,6 +103,27 @@ const s = StyleSheet.create({
     flexWrap: "wrap",
     margin: 3,
     width: width / 6,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "black",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
 
